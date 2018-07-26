@@ -16,15 +16,15 @@ class ProductTest < ActiveSupport::TestCase
   		title: "1 hat",
   		description: "this is a hat",
   		image_url: "aaa.jpg")
-  	
+
   	product.price = -1
   	assert product.invalid?
-  	assert_equal ["must be greater than or equal to 0.01"],
+  	assert_equal ["can't be less than 0.01"],
   		product.errors[:price]
 
   	product.price = 0
   	assert product.invalid?
-  	assert_equal ["must be greater than or equal to 0.01"],
+  	assert_equal ["can't be less than 0.01"],
   		product.errors[:price]
 
   	product.price = 1
@@ -40,14 +40,14 @@ class ProductTest < ActiveSupport::TestCase
   end
 
   test "image url" do
-  	ok = %w{ foo.gif foo.jpg foo.png FOO.JPG FOO.Jpg 
+  	ok = %w{ foo.gif foo.jpg foo.png FOO.JPG FOO.Jpg
   					http://a.b.c/x/y/z/foo.gif }
   	bad = %w{ foo.doc foo.gif/more foo.gif.more }
 
   	ok.each do |image_url|
   		assert new_product(image_url).valid?,
-  			"#{image_url} shouldn't be invalid" 
-  	end 
+  			"#{image_url} shouldn't be invalid"
+  	end
 
   	bad.each do |image_url|
   		assert new_product(image_url).invalid?,
@@ -62,11 +62,7 @@ class ProductTest < ActiveSupport::TestCase
   		price: 1,
   		image_url: "foo.gif")
   	assert product.invalid?
-  	assert_equal ["has already been taken"], 
+  	assert_equal ["has already been taken"],
   		product.errors[:title]
   end
 end
-
-
-
-
